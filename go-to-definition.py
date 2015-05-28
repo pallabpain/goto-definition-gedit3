@@ -81,14 +81,11 @@ class GoToDefinitionPlugin(GObject.Object, Gedit.WindowActivatable):
 		self.highlight_definition(self.jump_document, document)
 		if isinstance(view, Gedit.View) and document:
 			if getattr(view, self.HandlerName, None) is None:
-				handler_id = view.connect('populate-popup', 
-						self.populate_context_menu, document)
+				handler_id = view.connect('populate-popup', self.populate_context_menu, document)
 				setattr(view, self.HandlerName, handler_id)
-				handler_id = view.connect('key-press-event', 
-						self.on_key_press, document)
+				handler_id = view.connect('key-press-event', self.on_key_press, document)
 				setattr(view, self.HandlerName, handler_id)
-				handler_id = view.connect('button-press-event', 
-						self.on_button_press, document)
+				handler_id = view.connect('button-press-event', self.on_button_press, document)
 				setattr(view, self.HandlerName, handler_id)
 
 	def add_menu(self):
@@ -110,17 +107,13 @@ class GoToDefinitionPlugin(GObject.Object, Gedit.WindowActivatable):
 			self.window.remove_action(item[0])
 	
 	def show_info_message(self, title, text):
-		dialog = Gtk.MessageDialog(self.window, 0, 
-				Gtk.MessageType.INFO, Gtk.ButtonsType.OK,
-				title)
+		dialog = Gtk.MessageDialog(self.window, 0, Gtk.MessageType.INFO, Gtk.ButtonsType.OK, title)
 		dialog.format_secondary_text(text)
 		dialog.run()
 		dialog.destroy()
 	
 	def show_error_message(self, title, text):
-		dialog = Gtk.MessageDialog(self.window, 0, 
-				Gtk.MessageType.ERROR, Gtk.ButtonsType.OK,
-				title)
+		dialog = Gtk.MessageDialog(self.window, 0, Gtk.MessageType.ERROR, Gtk.ButtonsType.OK, title)
 		dialog.format_secondary_text(text)
 		dialog.run()
 		dialog.destroy()
@@ -128,42 +121,34 @@ class GoToDefinitionPlugin(GObject.Object, Gedit.WindowActivatable):
 	def select_folder(self, action, dummy):
 		# Displays a folder select window
 		dialog = Gtk.FileChooserDialog("Select project root folder", 
-					self.window, Gtk.FileChooserAction.SELECT_FOLDER,
-			("Close", Gtk.ResponseType.CANCEL, "Select", Gtk.ResponseType.OK))
-										
+		  self.window, Gtk.FileChooserAction.SELECT_FOLDER, 
+		  ("Close", Gtk.ResponseType.CANCEL, "Select", Gtk.ResponseType.OK))							
 		response = dialog.run()
-
 		if response == Gtk.ResponseType.OK:
 			self.root_directory = dialog.get_filename()
 			self.generate_tags()
 		elif response == Gtk.ResponseType.CANCEL:
 			pass
-
 		dialog.destroy()
 	
 	def show_dir_info(self, action, dummy):
 		# Displays the path of the current root directory
 		if(self.root_directory != ''):
-			self.show_info_message("Current Root Folder", 
-									self.root_directory)
+			self.show_info_message("Current Root Folder", self.root_directory)
 		else:
-			self.show_error_message("Current Root Folder", 
-									"Not yet selected.")
+			self.show_error_message("Current Root Folder", "Not yet selected.")
 	
 	def refresh_tags(self, action, dummy):
 		self.generate_tags()
-		self.show_info_message("Refresh Completed", 
-				"The tags have been updated.")
+		self.show_info_message("Refresh Completed", "The tags have been updated.")
 	
 	def generate_tags(self):
 		# Generates .tags file in the current root folder
 		os.chdir(self.root_directory)
-		command = ['ctags','--fields=+n-k-a-f-i-K-l-m-s-S-z-t', 
-			'--c-kinds=+dfmplstuv', '-R', '-f', '.tags']
+		command = ['ctags','--fields=+n-k-a-f-i-K-l-m-s-S-z-t', '--c-kinds=+dfmplstuv', '-R', '-f', '.tags']
 		subprocess.Popen(command)
 		command = 'grep -v ! .tags | cut -f 1 | uniq'
-		output = subprocess.Popen(command, stdout=subprocess.PIPE,
-					shell=True).communicate()[0]
+		output = subprocess.Popen(command, stdout=subprocess.PIPE, shell=True).communicate()[0]
 		output = output.decode()
 		output = output.split('\n')
 		output.pop()
@@ -197,8 +182,7 @@ class GoToDefinitionPlugin(GObject.Object, Gedit.WindowActivatable):
 		self.remove_text_highlight(document)
 		fg_color = '#191919'
 		bg_color = '#fcfc00'
-		document.create_tag('text-highlight', foreground=fg_color,
-							background=bg_color)
+		document.create_tag('text-highlight', foreground=fg_color, background=bg_color)
 		document.apply_tag_by_name('text-highlight', start, end)
 		
 	def belongs_to_project(self, doc):
@@ -215,8 +199,7 @@ class GoToDefinitionPlugin(GObject.Object, Gedit.WindowActivatable):
 		
 		win = view.get_window(Gtk.TextWindowType.TEXT)
 		ptr, x, y, mod = win.get_pointer()
-		x, y = view.window_to_buffer_coords(Gtk.TextWindowType.TEXT, 
-											x, y);
+		x, y = view.window_to_buffer_coords(Gtk.TextWindowType.TEXT, x, y);
 		end = view.get_iter_at_location(x, y)
 		if not end:
 			end = doc.get_iter_at_mark(doc.get_insert())
@@ -231,9 +214,8 @@ class GoToDefinitionPlugin(GObject.Object, Gedit.WindowActivatable):
 			if ch not in valid_chars:
 				start.forward_char()
 				break
-		
+				
 		word = doc.get_text(start, end, False)
-		
 		if word not in self.tag_list:
 			return False
 		else:
@@ -279,8 +261,7 @@ class GoToDefinitionPlugin(GObject.Object, Gedit.WindowActivatable):
 		tagfile_uri = helper.get_proper_path(self.root_directory) + '/.tags' 
 		os.chdir(READTAGS_PATH)
 		command = "./readtags -e -t " + tagfile_uri + " " + word
-		result = subprocess.Popen(command, stdout=subprocess.PIPE,
-						shell=True).communicate()[0]
+		result = subprocess.Popen(command, stdout=subprocess.PIPE, shell=True).communicate()[0]
 		
 		if len(result) == 0:
 			return False
@@ -302,8 +283,7 @@ class GoToDefinitionPlugin(GObject.Object, Gedit.WindowActivatable):
 			multiple_matches = True
 
 		if multiple_matches:
-			window = helper.MatchWindow(word, result, 
-					self.location_opener, doc)
+			window = helper.MatchWindow(word, result, self.location_opener, doc)
 			window.show_all()
 			
 	def location_opener(self, word, doc, selected):
@@ -331,7 +311,7 @@ class GoToDefinitionPlugin(GObject.Object, Gedit.WindowActivatable):
 				return True
 		
 		tab = self.window.create_tab_from_location(Gio.file_new_for_path(path), 
-			None, selected[1], selected[2] + 1, False, True)
+		  None, selected[1], selected[2] + 1, False, True)
 		self.jump_document = tab.get_document()
 		return True
 		

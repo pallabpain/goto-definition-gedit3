@@ -1,5 +1,5 @@
-from gi.repository import Gtk, Gedit, Gdk, GObject
 import re
+from gi.repository import Gtk, Gedit, Gdk, GObject
 
 def get_start_index(word, text):
 	#Get offset of word in text
@@ -65,7 +65,6 @@ class CLangProcessing(object):
 			for row in self.result:
 				if row[0] in self.doc_uri:
 					paths += 1
-			
 			if paths > 1:
 				return [], True
 			
@@ -79,10 +78,10 @@ class CLangProcessing(object):
 						if row[0] in self.header_path + item:
 							return row, False
 
-#The below classes are taken from Masatoshi Tsushima's work
+
+#Below classes are taken from Masatoshi Tsushima's work
 #which you can find here (https://github.com/utisam/gtagJump).
 #The classes have been modified to adjust to the plug-in
-
 class TreeViewWithColumn(Gtk.TreeView):
 	def __init__(self, *args, **kwargs):
 		super().__init__(*args, **kwargs)
@@ -90,6 +89,7 @@ class TreeViewWithColumn(Gtk.TreeView):
 			col = Gtk.TreeViewColumn(head, Gtk.CellRendererText(), text=i)
 			self.append_column(col)
 
+#Following class creates a window for the user to select appropriate match
 class MatchWindow(Gtk.Window):
 	def __init__(self, title, records, opener, doc):
 		Gtk.Window.__init__(self)
@@ -112,8 +112,7 @@ class MatchWindow(Gtk.Window):
 		
 	def key_enter(self, window, event):
 		e_type = event.get_event_type()
-		if (e_type == Gdk.EventType._2BUTTON_PRESS or 
-			(e_type == Gdk.EventType.KEY_PRESS and event.keyval == Gdk.KEY_Return)):
+		if (e_type == Gdk.EventType._2BUTTON_PRESS or (e_type == Gdk.EventType.KEY_PRESS and event.keyval == Gdk.KEY_Return)):
 			model, tree_itr = self.treeview.get_selection().get_selected()
 			selected = model.get(tree_itr, 0, 1, 2, 3)
 			self.destroy()
