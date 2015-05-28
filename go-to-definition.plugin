@@ -1,0 +1,10 @@
+[Plugin]
+Loader=python3
+Module=go-to-definition
+IAge=3
+Name=Go To Definition Plug-in
+Description=Jumps to the definition of an identifier in your code.
+Authors=Pallab Pain
+Copyright=Copyright@2015 Pallab Pain 
+Website=http://github.com/pallabpain
+Version=v1.0
