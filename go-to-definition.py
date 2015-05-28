@@ -1,3 +1,15 @@
+# Copyright (C) 2015 - Pallab Pain <pallabkumarpain@gmail.com>
+#
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 2, or (at your option)
+# any later version.
+# 
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+
 from gi.repository import Gio
 from gi.repository import Gtk
 from gi.repository import Gdk
@@ -144,6 +156,7 @@ class GoToDefinitionPlugin(GObject.Object, Gedit.WindowActivatable):
 				"The tags have been updated.")
 	
 	def generate_tags(self):
+		# Generates .tags file in the current root folder
 		os.chdir(self.root_directory)
 		command = ['ctags','--fields=+n-k-a-f-i-K-l-m-s-S-z-t', 
 			'--c-kinds=+dfmplstuv', '-R', '-f', '.tags']
@@ -194,6 +207,7 @@ class GoToDefinitionPlugin(GObject.Object, Gedit.WindowActivatable):
 		return False
 	
 	def get_word(self, view, doc):
+		#Gets the identifier under the cursor or pointer
 		if self.root_directory == '':
 			return False
 		if not self.belongs_to_project(doc):
@@ -226,6 +240,7 @@ class GoToDefinitionPlugin(GObject.Object, Gedit.WindowActivatable):
 			return word
 				
 	def populate_context_menu(self, view, menu, doc):
+		#Add Go-to definition option to pop-up menu
 		word = self.get_word(view, doc)
 		if word == False:
 			return False
@@ -251,10 +266,16 @@ class GoToDefinitionPlugin(GObject.Object, Gedit.WindowActivatable):
 			self.go_to_definition(word, doc)
 			
 	def on_button_press(self, view, event, doc):
+		#Remove highlight if any button is pressed.
 		self.remove_text_highlight(doc)
 		self.reset_highlight_vars()
 		
 	def go_to_definition(self, word, doc):
+		#Gets matches from .tags file using readtags and processes it to
+		#find appropriate match. If multiple matches are found and if the
+		#right one cannot be decided then a box with all options is shown.
+		#Pressing ENTER on the selected one will take you to it.
+		
 		tagfile_uri = helper.get_proper_path(self.root_directory) + '/.tags' 
 		os.chdir(READTAGS_PATH)
 		command = "./readtags -e -t " + tagfile_uri + " " + word
@@ -280,16 +301,14 @@ class GoToDefinitionPlugin(GObject.Object, Gedit.WindowActivatable):
 		else:
 			multiple_matches = True
 
-		
 		if multiple_matches:
-			window = helper.MatchWindow(word, 
-									result, 
-									self.location_opener, 
-									doc)
+			window = helper.MatchWindow(word, result, 
+					self.location_opener, doc)
 			window.show_all()
-		
 			
 	def location_opener(self, word, doc, selected):
+		#Opens a file (if needed) and scrolls to the definition
+		#and highlights it.
 		doc_uri = doc.get_uri_for_display()
 		self.word_length = len(word)
 		path = self.root_directory + '/' + selected[0] 
@@ -311,7 +330,8 @@ class GoToDefinitionPlugin(GObject.Object, Gedit.WindowActivatable):
 				self.reset_highlight_vars()
 				return True
 		
-		tab = self.window.create_tab_from_location(Gio.file_new_for_path(path), None, selected[1], selected[2] + 1, False, True)
+		tab = self.window.create_tab_from_location(Gio.file_new_for_path(path), 
+			None, selected[1], selected[2] + 1, False, True)
 		self.jump_document = tab.get_document()
 		return True
 		

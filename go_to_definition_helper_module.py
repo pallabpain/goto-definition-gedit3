@@ -23,7 +23,7 @@ def get_proper_path(path):
 	return ret
 
 def extract_attributes(data):
-	#Returns [path, line, column] values
+	#Returns [path, line, column, desc] values
 	line = re.findall('line:(\d+)', data)
 	line = int(line[0])
 	def_stmt = re.findall('/\^([^\$]+)\$/;"', data)
@@ -33,6 +33,8 @@ def extract_attributes(data):
 	return [tokens[1], line, col, def_stmt]
 
 def process_result(result):
+	#Processes all the retrieved rows from readtags
+	#and converts them to [path, line, column, desc] format.
 	result = result.decode()
 	result = result.split('\n')
 	result.pop()
@@ -42,7 +44,8 @@ def process_result(result):
 	return tag_data
 		
 class CLangProcessing(object):
-	
+#This class is responsible for finding appropriate match 
+#if the current source code file is a 'c' file.	
 	def __init__(self, doc, result):
 		self.doc_uri = doc.get_uri_for_display()
 		self.header_path = self.doc_uri.replace(doc.get_short_name_for_display(), '')
@@ -75,6 +78,10 @@ class CLangProcessing(object):
 					for item in self.headers:
 						if row[0] in self.header_path + item:
 							return row, False
+
+#The below classes are taken from Masatoshi Tsushima's work
+#which you can find here (https://github.com/utisam/gtagJump).
+#The classes have been modified to adjust to the plug-in
 
 class TreeViewWithColumn(Gtk.TreeView):
 	def __init__(self, *args, **kwargs):
@@ -111,8 +118,4 @@ class MatchWindow(Gtk.Window):
 			selected = model.get(tree_itr, 0, 1, 2, 3)
 			self.destroy()
 			self.opener(self.title, self.doc, selected)
-		
-		
-		
-		
 		
