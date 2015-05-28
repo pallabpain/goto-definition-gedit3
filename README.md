@@ -1,8 +1,10 @@
 # Go-To Definition Plugin for Gedit 3
 
-This plug-in will allow user to jump to the definition of the identifier selected.
+This plug-in will allow user to jump to the definition of the identifier selected and highlight it.
 
 Parts of this plugin are based on the work of [Masatoshi Tsushima](https://github.com/utisam/gtagJump)
+
+![Demo 1](http://share.gifyoutube.com/KRbDoq.gif)
 
 
 ## Requirements
@@ -23,7 +25,7 @@ The plug-in was developed and tested for *Gedit 3.14*
 
 - Open a terminal window and navigate to the extarcted folder.
 
-- Type `sh install.sh` and you're good to go.
+- Type `sh install.sh` and hit <kbd>Enter</kbd> and you're good to go.
 
 ## Usage
 
@@ -31,8 +33,16 @@ Step. 1 - Go to the menu and click on Select Root Folder (this can be your proje
 
 Step. 2 - Open any file which belongs to your Root Folder (or Project folder) and right click on any identifier. If the context menu shows the Go-To Definition option, then click on it and it will take you to the definition of the identifier. Alternatively you can press <kbd>Ctrl+F1</kbd> on the identifier and it will do the same.
 
+Keyboard Shortcuts
+
+- To select root folder <kbd>Ctrl + Alt + O</kbd>
+- To check your current root folder <kbd>Ctrl + Alt + C</kbd>
+- To check your current root folder <kbd>Ctrl + Alt + R</kbd>
+- To go to the definition of an identifier <kbd>Ctrl+F1</kbd>
+
+
 ## Languages Supported
 
-This plug-in supports all the languages supported by Exuberant Ctags:
+This plug-in supports all the languages supported by Exuberant Ctags.
 But, full fledge functionality may not be available for all.
 It should work well for C, Python, C++, Ruby. Although the plug-in is being tested exhaustively and it will soon work for all supported languages.
