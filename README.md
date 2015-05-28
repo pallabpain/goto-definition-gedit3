@@ -35,6 +35,8 @@ The plug-in was developed and tested for *Gedit 3.14*
 
 - Alternatively you can press <kbd>Ctrl+F1</kbd> on the identifier and it will do the same.
 
+- Keep refershing the tags after making changes in your project. 
+
 **Keyboard Shortcuts**
 
 - *To select root folder*: <kbd>Ctrl + Alt + O</kbd>
