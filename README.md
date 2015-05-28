@@ -2,9 +2,11 @@
 
 This plug-in will allow user to jump to the definition of the identifier selected and highlight it.
 
-Parts of this plugin are based on the work of [Masatoshi Tsushima](https://github.com/utisam/gtagJump)
-
 ![Demo 1](http://share.gifyoutube.com/KRbDoq.gif)
+
+**Note:** A part of this plug-in based on the work of [Masatoshi Tsushima](https://github.com/utisam/gtagJump)
+
+
 
 
 ## Requirements
