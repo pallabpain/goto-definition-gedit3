@@ -145,6 +145,7 @@ class GoToDefinitionPlugin(GObject.Object, Gedit.WindowActivatable):
 	def generate_tags(self):
 		# Generates .tags file in the current root folder
 		os.chdir(self.root_directory)
+		#The command part will be updated soon for other languages
 		command = ['ctags','--fields=+n-k-a-f-i-K-l-m-s-S-z-t', '--c-kinds=+dfmplstuv', '-R', '-f', '.tags']
 		subprocess.Popen(command)
 		command = 'grep -v ! .tags | cut -f 1 | uniq'
