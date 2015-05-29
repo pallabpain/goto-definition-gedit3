@@ -18,7 +18,7 @@ install_readtags() {
 }
 
 # Install plugin
-echo "\nInstalling plugin"
+echo "\nInstalling Go-To Definition plug-in for Gedit 3"
 mkdir -p $PLUGINS_FOLDER
 install_file 'go-to-definition.plugin'
 install_file 'go-to-definition.py'
