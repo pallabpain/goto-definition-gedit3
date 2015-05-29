@@ -282,9 +282,13 @@ class GoToDefinitionPlugin(GObject.Object, Gedit.WindowActivatable):
 				return True
 		else:
 			multiple_matches = True
-
+		doc_uri = doc.get_uri_for_display()
 		if multiple_matches:
-			window = helper.MatchWindow(word, result, self.location_opener, doc)
+			resultset = []
+			for item in result:
+				if item[0] in doc_uri:
+					resultset.append(item)
+			window = helper.MatchWindow(word, resultset, self.location_opener, doc)
 			window.show_all()
 			
 	def location_opener(self, word, doc, selected):
