@@ -2,9 +2,11 @@
 
 This plug-in will allow user to jump to the definition of the identifier selected and highlight it.
 
-Parts of this plugin are based on the work of [Masatoshi Tsushima](https://github.com/utisam/gtagJump)
-
 ![Demo 1](http://share.gifyoutube.com/KRbDoq.gif)
+
+**Note:** A part of this plug-in based on the work of [Masatoshi Tsushima](https://github.com/utisam/gtagJump)
+
+
 
 
 ## Requirements
@@ -34,6 +36,8 @@ The plug-in was developed and tested for *Gedit 3.14*
 - Open any file which belongs to your Root Folder (or Project folder) and right click on any identifier. If the context menu shows the **Go-To Definition** option, then click on it and it will take you to the definition of the identifier. 
 
 - Alternatively you can press <kbd>Ctrl+F1</kbd> on the identifier and it will do the same.
+
+- Keep refershing the tags after making changes in your project. 
 
 **Keyboard Shortcuts**
 
