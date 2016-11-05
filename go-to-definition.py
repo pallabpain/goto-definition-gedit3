@@ -201,7 +201,7 @@ class GoToDefinitionPlugin(GObject.Object, Gedit.WindowActivatable):
 		win = view.get_window(Gtk.TextWindowType.TEXT)
 		ptr, x, y, mod = win.get_pointer()
 		x, y = view.window_to_buffer_coords(Gtk.TextWindowType.TEXT, x, y);
-		end = view.get_iter_at_location(x, y)
+		_flag, end = view.get_iter_at_location(x, y)
 		if not end:
 			end = doc.get_iter_at_mark(doc.get_insert())
 		
