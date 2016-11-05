@@ -147,7 +147,8 @@ class GoToDefinitionPlugin(GObject.Object, Gedit.WindowActivatable):
 		os.chdir(self.root_directory)
 		#The command part will be updated soon for other languages
 		command = ['ctags','--fields=+n-k-a-f-i-K-l-m-s-S-z-t', '--c-kinds=+dfmplstuv', '-R', '-f', '.tags']
-		subprocess.Popen(command)
+		# MBO replaced popen call by check call because we must wait .tags file to be fully created before parsing it
+		subprocess.check_call(command)
 		command = 'grep -v ! .tags | cut -f 1 | uniq'
 		output = subprocess.Popen(command, stdout=subprocess.PIPE, shell=True).communicate()[0]
 		output = output.decode()
