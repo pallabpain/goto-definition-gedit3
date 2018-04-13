@@ -147,7 +147,8 @@ class GoToDefinitionPlugin(GObject.Object, Gedit.WindowActivatable):
 		os.chdir(self.root_directory)
 		#The command part will be updated soon for other languages
 		command = ['ctags','--fields=+n-k-a-f-i-K-l-m-s-S-z-t', '--c-kinds=+dfmplstuv', '-R', '-f', '.tags']
-		subprocess.Popen(command)
+		# MBO replaced popen call by check call because we must wait .tags file to be fully created before parsing it
+		subprocess.check_call(command)
 		command = 'grep -v ! .tags | cut -f 1 | uniq'
 		output = subprocess.Popen(command, stdout=subprocess.PIPE, shell=True).communicate()[0]
 		output = output.decode()
@@ -201,7 +202,7 @@ class GoToDefinitionPlugin(GObject.Object, Gedit.WindowActivatable):
 		win = view.get_window(Gtk.TextWindowType.TEXT)
 		ptr, x, y, mod = win.get_pointer()
 		x, y = view.window_to_buffer_coords(Gtk.TextWindowType.TEXT, x, y);
-		end = view.get_iter_at_location(x, y)
+		_flag, end = view.get_iter_at_location(x, y)
 		if not end:
 			end = doc.get_iter_at_mark(doc.get_insert())
 		
@@ -282,12 +283,11 @@ class GoToDefinitionPlugin(GObject.Object, Gedit.WindowActivatable):
 				return True
 		else:
 			multiple_matches = True
-		doc_uri = doc.get_uri_for_display()
+
 		if multiple_matches:
 			resultset = []
 			for item in result:
-				if item[0] in doc_uri:
-					resultset.append(item)
+				resultset.append(item)
 			window = helper.MatchWindow(word, resultset, self.location_opener, doc)
 			window.show_all()
 			
